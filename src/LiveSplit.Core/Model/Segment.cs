@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 using LiveSplit.Model.Comparisons;
 
@@ -19,6 +21,10 @@ public class Segment : ISegment
     public Time BestSegmentTime { get; set; }
     public Time SplitTime { get; set; }
     public SegmentHistory SegmentHistory { get; set; }
+    /// <summary>
+    ///     A dictionary mapping custom variable names to values.
+    /// </summary>
+    public Dictionary<string, string> CustomVariableValues { get; private set; } = new Dictionary<string, string>();
 
     public Segment(
         string name, Time pbSplitTime = default,
@@ -32,6 +38,7 @@ public class Segment : ISegment
         SplitTime = splitTime;
         Icon = icon;
         SegmentHistory = [];
+        CustomVariableValues = new Dictionary<string, string>();
     }
 
     public Segment Clone()
@@ -44,6 +51,7 @@ public class Segment : ISegment
             SplitTime = SplitTime,
             Icon = Icon,
             SegmentHistory = newSegmentHistory,
+            CustomVariableValues = CustomVariableValues.ToDictionary(x => x.Key, x => x.Value),
             Comparisons = (IComparisons)Comparisons.Clone()
         };
     }
